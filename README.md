@@ -53,6 +53,7 @@ EPLQ/
    ```bash
    git clone https://github.com/your-username/eplq-system.git
    cd eplq-system
+   vercel Live Link : https://85-psi.vercel.app/
    ```
 2. **Configure Firebase**
    - Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
