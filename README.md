@@ -51,8 +51,8 @@ EPLQ/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/eplq-system.git
-   cd eplq-system
+   git clone https://github.com/latha0001/EPLQ-
+   cd EPLQ-
    vercel Live Link : https://85-psi.vercel.app/
    ```
 2. **Configure Firebase**
