@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPLQ - Efficient Privacy-Preserving Location-Based Query</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>EPLQ</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+            <div class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Efficient Privacy-Preserving
+                        <span class="gradient-text">Location-Based Queries</span>
+                    </h1>
+                    <p class="hero-description">
+                        EPLQ provides secure, encrypted location-based services with advanced privacy protection
+                        for spatial range queries and POI discovery using cutting-edge predicate-only encryption.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="register.html" class="btn btn-primary btn-large">
+                            <i class="fas fa-search"></i>
+                            Start Secure Search
+                        </a>
+                        <a href="#features" class="btn btn-secondary btn-large">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-demo">
+                    <div class="demo-card">
+                        <div class="demo-header">
+                            <div class="demo-dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <div class="demo-item">
+                                <i class="fas fa-shield-alt text-success"></i>
+                                <span>Query Encrypted</span>
+                            </div>
+                            <div class="demo-item">
+                                <i class="fas fa-map-marker-alt text-primary"></i>
+                                <span>Location Protected</span>
+                            </div>
+                            <div class="demo-item">
+                                <i class="fas fa-chart-line text-purple"></i>
+                                <span>Tree-Indexed</span>
+                            </div>
+                            <div class="demo-metrics">
+                                <div class="metric">
+                                    <div class="metric-label">Query Performance</div>
+                                    <div class="metric-value">~0.9s</div>
+                                    <div class="metric-desc">Mobile generation time</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Advanced Privacy Features</h2>
+                <p>Industry-leading encryption and privacy-preserving technologies for secure location queries</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Predicate-Only Encryption</h3>
+                    <p>First-of-its-kind encryption system for inner product range queries with complete privacy preservation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Spatial Range Queries</h3>
+                    <p>Efficiently find POIs within circular areas while maintaining location privacy and data security</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Tree Index Structure</h3>
+                    <p>Optimized query latency with privacy-preserving tree indexing for faster spatial searches</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Optimized</h3>
+                    <p>~0.9 second query generation on Android devices with efficient cloud processing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">0.9s</div>
+                    <div class="stat-label">Query Generation</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Privacy Protection</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Secure Queries</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">256-bit</div>
+                    <div class="stat-label">AES Encryption</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>EPLQ</span>
+                </div>
+                <p>&copy; 2024 EPLQ. All rights reserved. Privacy-preserving location services.</p>
+            </div>
+        </div>
+    </footer>
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/logger.js"></script>
+    <script>
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        Logger.info('Landing page loaded');
+    </script>
+</body>
+</html>

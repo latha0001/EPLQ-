@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - EPLQ</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="brand-text">
+                        <h1>Privacy-Preserving Search</h1>
+                        <p>Secure location-based queries</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="userName">Loading...</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="search-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-search"></i> Spatial Range Query</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="searchForm" class="search-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="latitude">Your Latitude</label>
+                                        <input type="number" id="latitude" name="latitude" step="any" required placeholder="40.7829">
+                                        <button type="button" class="location-btn" onclick="getCurrentLocation()">
+                                            <i class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="longitude">Your Longitude</label>
+                                        <input type="number" id="longitude" name="longitude" step="any" required placeholder="-73.9654">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="radius">Search Radius (km)</label>
+                                        <input type="number" id="radius" name="radius" min="0.1" max="50" step="0.1" value="5" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Category Filter</label>
+                                        <select id="category" name="category">
+                                            <option value="">All categories</option>
+                                            <option value="restaurant">Restaurant</option>
+                                            <option value="hospital">Hospital</option>
+                                            <option value="school">School</option>
+                                            <option value="park">Park</option>
+                                            <option value="shopping">Shopping</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full" id="searchBtn">
+                                    <i class="fas fa-search"></i>
+                                    Execute Privacy-Preserving Search
+                                </button>
+                            </form>
+                            <div class="privacy-indicators">
+                                <div class="privacy-badge success">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Query Encrypted
+                                </div>
+                                <div class="privacy-badge primary">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Location Protected
+                                </div>
+                                <div class="privacy-badge purple">
+                                    <i class="fas fa-chart-line"></i>
+                                    Tree-Indexed
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metrics-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Query Performance</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="metrics-grid">
+                                <div class="metric-item">
+                                    <div class="metric-label">Last Query Time</div>
+                                    <div class="metric-value" id="queryTime">-</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">Encryption Time</div>
+                                    <div class="metric-value" id="encryptionTime">-</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">Results Found</div>
+                                    <div class="metric-value" id="resultsCount">-</div>
+                                </div>
+                                <div class="metric-item success">
+                                    <div class="metric-label">Privacy Level</div>
+                                    <div class="metric-value">High</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="results-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-map-marker-alt"></i> Search Results</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="searchResults" class="search-results">
+                            <div class="no-results">
+                                <i class="fas fa-search"></i>
+                                <p>Execute a privacy-preserving search to see results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing secure query...</p>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/logger.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/encryption.js"></script>
+    <script src="js/search.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Logger.info('User dashboard loaded');
+            initializeDashboard();
+        });
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                showLoading('Getting your location...');
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                        document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                        hideLoading();
+                        showToast('Location detected successfully!', 'success');
+                        Logger.info('User location detected', { 
+                            lat: position.coords.latitude, 
+                            lng: position.coords.longitude 
+                        });
+                    },
+                    function(error) {
+                        hideLoading();
+                        showToast('Unable to get your location. Please enter manually.', 'warning');
+                        Logger.warn('Geolocation error', { error: error.message });
+                    }
+                );
+            } else {
+                showToast('Geolocation is not supported by this browser.', 'error');
+                Logger.error('Geolocation not supported');
+            }
+        }
+    </script>
+</body>
+</html>

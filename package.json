@@ -1,0 +1,34 @@
+{
+  "name": "eplq-privacy-location-system",
+  "version": "1.0.0",
+  "description": "Efficient Privacy-Preserving Location-Based Query System",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "firebase serve --only hosting",
+    "build": "echo 'Static site - no build required'",
+    "deploy": "firebase deploy --only hosting",
+    "test": "echo 'Tests not implemented yet'",
+    "lint": "echo 'Linting not configured'"
+  },
+  "keywords": [
+    "privacy",
+    "encryption",
+    "location-based-services",
+    "spatial-queries",
+    "differential-privacy",
+    "firebase"
+  ],
+  "author": "EPLQ Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "firebase-tools": "^12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/eplq-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/eplq-system/issues"
+  },
+  "homepage": "https://your-project.web.app"
+}

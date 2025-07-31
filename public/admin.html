@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EPLQ</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="brand-text">
+                        <h1>Admin Dashboard</h1>
+                        <p>Manage encrypted location data</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="userName">Loading...</span>
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="stats-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-bar"></i> System Statistics</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-item primary">
+                                    <div class="stat-value" id="totalLocations">0</div>
+                                    <div class="stat-label">Total Locations</div>
+                                </div>
+                                <div class="stat-item success">
+                                    <div class="stat-value" id="activeUsers">0</div>
+                                    <div class="stat-label">Active Users</div>
+                                </div>
+                                <div class="stat-item purple">
+                                    <div class="stat-value" id="totalQueries">0</div>
+                                    <div class="stat-label">Total Queries</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="upload-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-upload"></i> Upload Location Data</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="uploadForm" class="upload-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="locationName">Location Name</label>
+                                        <input type="text" id="locationName" name="locationName" required placeholder="e.g., Central Park">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="locationCategory">Category</label>
+                                        <select id="locationCategory" name="locationCategory" required>
+                                            <option value="">Select category</option>
+                                            <option value="restaurant">Restaurant</option>
+                                            <option value="hospital">Hospital</option>
+                                            <option value="school">School</option>
+                                            <option value="park">Park</option>
+                                            <option value="shopping">Shopping</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="locationLatitude">Latitude</label>
+                                        <input type="number" id="locationLatitude" name="locationLatitude" step="any" required placeholder="40.7829">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="locationLongitude">Longitude</label>
+                                        <input type="number" id="locationLongitude" name="locationLongitude" step="any" required placeholder="-73.9654">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="locationDescription">Description</label>
+                                    <textarea id="locationDescription" name="locationDescription" rows="3" placeholder="Additional details about this location"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full" id="uploadBtn">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Encrypt & Upload Data
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="locations-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-database"></i> Encrypted Location Database</h3>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="refreshLocations()">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table id="locationsTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Coordinates</th>
+                                        <th>Upload Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="locationsTableBody">
+                                    <tr class="no-data">
+                                        <td colspan="6">
+                                            <i class="fas fa-database"></i>
+                                            <p>No locations uploaded yet</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/logger.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/encryption.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Logger.info('Admin dashboard loaded');
+            initializeAdminDashboard();
+        });
+        function refreshLocations() {
+            Logger.info('Refreshing locations list');
+            loadLocations();
+        }
+    </script>
+</body>
+</html>
